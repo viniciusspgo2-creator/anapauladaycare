@@ -39,6 +39,28 @@ export async function PUT(req: NextRequest) {
     if (body?.siteContent !== undefined) {
       await setSetting('site_content', JSON.stringify(body.siteContent))
     }
+    // Galeria: salva SÓ a galeria, preservando os demais textos/imagens já salvos
+    if (body?.gallery !== undefined) {
+      const g = body.gallery
+      const valid =
+        Array.isArray(g) &&
+        g.every(
+          (c: unknown) =>
+            c && typeof c === 'object' &&
+            typeof (c as { name?: unknown }).name === 'string' &&
+            Array.isArray((c as { images?: unknown }).images),
+        )
+      if (!valid) return NextResponse.json({ error: 'Invalid gallery payload.' }, { status: 400 })
+      let current: Record<string, unknown> = {}
+      try {
+        const raw = await getSetting('site_content')
+        if (raw) current = JSON.parse(raw)
+      } catch {
+        current = {}
+      }
+      current.gallery = g
+      await setSetting('site_content', JSON.stringify(current))
+    }
     if (body?.imgKey && typeof body.imgKey === 'string' && body.imgKey.startsWith('img:')) {
       const value = String(body.imgValue ?? '')
       if (!value.startsWith('data:image/')) {

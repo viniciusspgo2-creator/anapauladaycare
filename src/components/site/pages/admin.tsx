@@ -4,14 +4,15 @@ import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import {
   LayoutDashboard, FileText, Search, Bot, Users, LogOut, Plus, Pencil, Trash2, Eye, EyeOff,
-  Loader2, Lock, TrendingUp, Globe, Star, SlidersHorizontal,
+  Loader2, Lock, TrendingUp, Globe, Star, SlidersHorizontal, Images,
 } from 'lucide-react'
 import { ContentTab } from '@/components/site/pages/admin-content'
+import { GalleryTab } from '@/components/site/pages/admin-gallery'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, CartesianGrid,
 } from 'recharts'
 
-type Tab = 'overview' | 'content' | 'posts' | 'seo' | 'ai' | 'leads'
+type Tab = 'overview' | 'content' | 'gallery' | 'posts' | 'seo' | 'ai' | 'leads'
 
 type PostRow = {
   id: string; slug: string; title: string; metaTitle: string | null; metaDescription: string | null
@@ -144,6 +145,7 @@ export function AdminPage() {
         {([
           ['overview', 'Overview', LayoutDashboard],
           ['content', 'Site Content', SlidersHorizontal],
+          ['gallery', 'Gallery', Images],
           ['posts', 'Blog CMS', FileText],
           ['seo', 'SEO Manager', Search],
           ['ai', 'AI & Settings', Bot],
@@ -165,6 +167,7 @@ export function AdminPage() {
       <div className="mt-6">
         {tab === 'overview' && <OverviewTab />}
         {tab === 'content' && <ContentTab />}
+        {tab === 'gallery' && <GalleryTab />}
         {tab === 'posts' && <PostsTab />}
         {tab === 'seo' && <SeoTab />}
         {tab === 'ai' && <AiTab />}
